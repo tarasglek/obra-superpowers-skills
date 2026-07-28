@@ -29,12 +29,17 @@ Task tool (general-purpose):
     ## Your Job
 
     Once you're clear on requirements:
-    1. Implement exactly what the task specifies
-    2. Write tests (following TDD if task says to)
-    3. Verify implementation works
-    4. Commit your work
-    5. Self-review (see below)
-    6. Report back
+    1. Inspect the worktree and distinguish known task changes from unrelated/pre-existing changes
+    2. Describe unrelated/pre-existing changes, then immediately commit known task changes as `WIP: <conventional subject>` without asking for confirmation
+    3. Leave unrelated or ambiguous files untouched and proceed; clarify only if no safe known-task scope can be identified
+    4. Write tests and implement exactly what the task specifies (following TDD if required)
+    5. Before every test or verification rerun, amend later task edits into that WIP
+    6. Verify implementation works
+    7. After fresh verification passes, amend the commit message to remove `WIP:`
+    8. Self-review (see below); amend and reverify any resulting changes before finalizing again
+    9. Report back
+
+    Never include unrelated/pre-existing changes unless explicitly requested. Do not request routine commit-scope confirmation. If verification cannot pass, leave the commit marked `WIP:` and report the failures.
 
     Work from: [directory]
 
@@ -72,7 +77,8 @@ Task tool (general-purpose):
     When done, report:
     - What you implemented
     - What you tested and test results
-    - Files changed
+    - WIP and final commit IDs (or why the commit remains WIP)
+    - Files changed and unrelated/pre-existing files left untouched
     - Self-review findings (if any)
     - Any issues or concerns
 ```

@@ -11,6 +11,8 @@ Write the test first. Watch it fail. Write minimal code to pass.
 
 **Core principle:** If you didn't watch the test fail, you don't know if it tests the right thing.
 
+**REQUIRED SUB-SKILL:** Use `commit` to checkpoint known task changes as WIP without confirmation before running the next test. Leave unrelated changes untouched, amend fixes into WIP, and remove `WIP:` only after fresh GREEN verification.
+
 **Violating the letter of the rules is violating the spirit of the rules.**
 
 ## When to Use
@@ -112,7 +114,7 @@ Vague name, tests mock not code
 
 ### Verify RED - Watch It Fail
 
-**MANDATORY. Never skip.**
+**MANDATORY. Never skip.** First commit the new test as WIP without asking for confirmation. Do not run it while that task change is uncommitted.
 
 ```bash
 npm test path/to/test.test.ts
@@ -167,7 +169,7 @@ Don't add features, refactor other code, or "improve" beyond the test.
 
 ### Verify GREEN - Watch It Pass
 
-**MANDATORY.**
+**MANDATORY.** Amend the implementation into the WIP checkpoint before running this test.
 
 ```bash
 npm test path/to/test.test.ts
@@ -329,10 +331,13 @@ Extract validation for multiple fields if needed.
 Before marking work complete:
 
 - [ ] Every new function/method has a test
+- [ ] Described unrelated/pre-existing changes and checkpointed known task changes as WIP without confirmation
+- [ ] Left unrelated or ambiguous changes untouched
+- [ ] Checkpointed each later task edit by amending WIP before its next test run
 - [ ] Watched each test fail before implementing
 - [ ] Each test failed for expected reason (feature missing, not typo)
-- [ ] Wrote minimal code to pass each test
-- [ ] All tests pass
+- [ ] Wrote minimal code to pass each test and amended it into WIP before GREEN
+- [ ] All tests pass and the final commit no longer says `WIP:`
 - [ ] Output pristine (no errors, warnings)
 - [ ] Tests use real code (mocks only if unavoidable)
 - [ ] Edge cases and errors covered

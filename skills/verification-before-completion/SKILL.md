@@ -1,6 +1,6 @@
 ---
 name: verification-before-completion
-description: Use when about to claim work is complete, fixed, or passing, before committing or creating PRs - requires running verification commands and confirming output before making any success claims; evidence before assertions always
+description: Use when task changes exist before running tests or checks, or when about to claim work is complete, fixed, or passing, finalize a commit, or create a PR
 ---
 
 # Verification Before Completion
@@ -9,32 +9,38 @@ description: Use when about to claim work is complete, fixed, or passing, before
 
 Claiming work is complete without verification is dishonesty, not efficiency.
 
-**Core principle:** Evidence before claims, always.
+**Core principle:** Checkpoint changes first; evidence before claims and final commits, always.
+
+**REQUIRED SUB-SKILL:** Use `commit` to create and maintain the WIP checkpoint.
 
 **Violating the letter of this rule is violating the spirit of this rule.**
 
-## The Iron Law
+## The Iron Laws
 
 ```
-NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE
+NO VERIFICATION RUN WITH UNCOMMITTED TASK CHANGES
+NO COMPLETION CLAIMS OR FINAL COMMITS WITHOUT FRESH VERIFICATION EVIDENCE
 ```
+
+A commit whose subject starts with `WIP:` is a checkpoint, not a completion claim. It MUST exist before verification when task changes are present—even before lightweight checks such as `git diff --check`. Do not insert `git diff --cached --check` between staging and the WIP commit. Fixes MUST be amended into WIP before rerunning verification. Remove `WIP:` only after fresh verification passes.
 
 If you haven't run the verification command in this message, you cannot claim it passes.
 
 ## The Gate Function
 
 ```
-BEFORE claiming any status or expressing satisfaction:
+BEFORE running verification or claiming status:
 
-1. IDENTIFY: What command proves this claim?
-2. RUN: Execute the FULL command (fresh, complete)
-3. READ: Full output, check exit code, count failures
-4. VERIFY: Does output confirm the claim?
-   - If NO: State actual status with evidence
-   - If YES: State claim WITH evidence
-5. ONLY THEN: Make the claim
+1. INSPECT: Identify known task changes and unrelated/pre-existing changes.
+2. REPORT: Describe unrelated/pre-existing changes before any necessary clarification.
+3. CHECKPOINT: Immediately commit known task changes as WIP without confirmation; exclude unrelated or ambiguous changes.
+4. IDENTIFY: What full command proves the intended claim?
+5. RUN: Execute it fresh and completely.
+6. READ: Check full output, exit code, and failure count.
+7. IF FAILED: State evidence; amend each fix into WIP before rerunning.
+8. IF PASSED: Amend the subject to remove WIP, then state the claim with evidence.
 
-Skip any step = lying, not verifying
+Skip any step = unverified work
 ```
 
 ## Common Failures
@@ -53,7 +59,11 @@ Skip any step = lying, not verifying
 
 - Using "should", "probably", "seems to"
 - Expressing satisfaction before verification ("Great!", "Perfect!", "Done!", etc.)
-- About to commit/push/PR without verification
+- About to create a final commit/push/PR without verification
+- Asking for routine commit-scope confirmation instead of checkpointing and proceeding
+- Running `git diff --cached --check` or another check immediately before the WIP commit
+- About to run verification while task changes are outside a WIP commit
+- Treating a WIP checkpoint as a success claim
 - Trusting agent success reports
 - Relying on partial verification
 - Thinking "just this once"
@@ -117,10 +127,11 @@ From 24 failure memories:
 ## When To Apply
 
 **ALWAYS before:**
+- Running tests, builds, linters, or other verification with task changes present
 - ANY variation of success/completion claims
 - ANY expression of satisfaction
 - ANY positive statement about work state
-- Committing, PR creation, task completion
+- Finalizing a WIP commit, PR creation, task completion
 - Moving to next task
 - Delegating to agents
 
