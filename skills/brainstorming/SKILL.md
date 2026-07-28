@@ -23,7 +23,7 @@ Every project goes through this process. A todo list, a single-function utility,
 
 You MUST create a task for each of these items and complete them in order:
 
-1. **Explore project context** — check files, docs, recent commits
+1. **Explore project context** — check files, docs, recent commits; for substantive or unfamiliar work, research prior local, session, forge, and external work
 2. **Ask clarifying questions** — one at a time, understand purpose/constraints/success criteria
 3. **Propose 2-3 approaches** — with trade-offs and your recommendation
 4. **Present design** — in sections scaled to their complexity, get user approval after each section
@@ -57,7 +57,15 @@ digraph brainstorming {
 ## The Process
 
 **Understanding the idea:**
-- Check out the current project state first (files, docs, recent commits)
+- Check current project state first (files, docs, recent commits).
+- For substantive features, bugs, architecture changes, or unfamiliar areas, before questions/design:
+  1. inspect relevant Git and path history;
+  2. search prior local Pi sessions by repository path and task terms;
+  3. detect GitHub/GitLab remotes and search related open/closed issues and PRs/MRs;
+  4. use Brave Search for current primary sources, comparable implementations, and known pitfalls;
+  5. summarize reusable findings and verify historical claims against the current tree.
+- Missing sessions, authentication, or search tools: report gap and continue; do not block planning.
+- Skip expanded research for trivial edits and documentation.
 - Ask questions one at a time to refine the idea
 - Prefer multiple choice questions when possible, but open-ended is fine too
 - Only one question per message - if a topic needs more exploration, break it into multiple questions
