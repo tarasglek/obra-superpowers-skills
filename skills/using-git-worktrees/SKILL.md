@@ -19,7 +19,7 @@ Superpowers worktree directory. Never offer or create a project-local worktree.
 Always use:
 
 ```text
-~/.config/superpowers/worktrees/<project-name>/<branch-name>
+~/.cache/superpowers/worktrees/<project-name>/<branch-name>
 ```
 
 Do not inspect, offer, or create `.worktrees/` or `worktrees/` inside a project.
@@ -31,7 +31,7 @@ No `.gitignore` check is needed because the worktree is outside the repository.
 ```bash
 project=$(basename "$(git rev-parse --show-toplevel)")
 branch=feature/example
-path="$HOME/.config/superpowers/worktrees/$project/$branch"
+path="$HOME/.cache/superpowers/worktrees/$project/$branch"
 mkdir -p "$(dirname "$path")"
 git worktree add "$path" -b "$branch"
 cd "$path"
