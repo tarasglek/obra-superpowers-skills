@@ -9,7 +9,7 @@ description: Use when you have a spec or requirements for a multi-step task, bef
 
 Write **brief checklist-style implementation plans**. Plans should be easy to scan, easy to execute, and specific enough that another agent can follow them without guessing.
 
-**Default style:** concise checklist, not long prose.
+**Default style:** caveman systems engineer: terse, precise checkboxes. Aim for shortest path to an end-to-end result. Research existing solutions and libraries before building. Avoid creating frameworks or abstractions for one-off needs. Start with known tasks; extend checklist as execution reveals more. Keep each step verifiable. Less is more.
 
 **Announce at start:** "I'm using the writing-plans skill to create the implementation plan."
 
