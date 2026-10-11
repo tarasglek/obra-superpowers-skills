@@ -5,15 +5,15 @@ description: Use when completing tasks, implementing major features, or before m
 
 # Requesting Code Review
 
-Dispatch superpowers:code-reviewer subagent to catch issues before they cascade.
+Use independent review to catch issues before they cascade. Routine local changes need focused verification and self-review, not automatic reviewer dispatch.
 
-**Core principle:** Review early, review often.
+**Core principle:** Match review depth to impact; self-review does not replace required independent review.
 
 ## When to Request Review
 
 **Mandatory:**
 - After each task in subagent-driven development
-- After completing major feature
+- For complex changes, major features, or high-risk changes, before declaring readiness
 - Before merge to main
 
 **Optional but valuable:**
@@ -82,8 +82,9 @@ You: [Fix progress indicators]
 - Fix before moving to next task
 
 **Executing Plans:**
-- Review after each batch (3 tasks)
-- Get feedback, apply, continue
+- Independent review for complex, major, or high-risk changes at meaningful boundaries, not fixed three-task batches
+- Routine changes: focused tests and self-review; continue authorized work without approval waits
+- Resolve critical/important findings, checkpoint fixes, and reverify; if required review is unavailable, report the readiness blocker
 
 **Ad-Hoc Development:**
 - Review before merge
@@ -92,7 +93,7 @@ You: [Fix progress indicators]
 ## Red Flags
 
 **Never:**
-- Skip review because "it's simple"
+- Skip required independent review because of time pressure or a claim that high-risk work is simple
 - Ignore Critical issues
 - Proceed with unfixed Important issues
 - Argue with valid technical feedback

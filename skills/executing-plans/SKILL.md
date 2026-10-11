@@ -1,82 +1,39 @@
 ---
 name: executing-plans
-description: Use when you have a written implementation plan to execute with review checkpoints
+description: Use when executing or resuming an authorized implementation plan
 ---
 
 # Executing Plans
 
-## Overview
+Execute in dependency order, with evidence and recoverable checkpoints. Progress reports are not automatic approval gates.
 
-Load plan, review critically, execute tasks in batches, report for review between batches.
+## Start or Resume
 
-**Core principle:** Batch execution with checkpoints for architect review.
+Read the plan and inspect current code, Git/index state, and available verification evidence. Reconcile completed work, stale assumptions, partial implementation, and blockers; do not trust yesterday's completion labels over the current tree. Preserve unrelated work, including staged changes.
 
-**Announce at start:** "I'm using the executing-plans skill to implement this plan."
+Confirm that execution is authorized. A plan-only or proposal-only request stops after the proposal. Existing authorization persists within scope: do not restart design approval when resuming. Ask only about consequential ambiguity, changed outcomes, unsafe actions, or missing authority.
 
-## The Process
+Follow the **User Progress Contract in superpowers:using-superpowers**: start with scope/next action, report milestones and failures, give a heartbeat after roughly 2 minutes of silence, and finish with verified results and remaining work. Do not announce skill use or narrate every tool call.
 
-### Step 1: Load and Review Plan
-1. Read plan file
-2. Review critically - identify any questions or concerns about the plan
-3. If concerns: Raise them with your human partner before starting
-4. If no concerns: Create TodoWrite and proceed
+## Execute and Verify
 
-### Step 2: Execute Batch
-**Default: First 3 tasks**
+For each coherent task:
+1. Inspect the relevant implementation and tests. Adapt incidental details to current evidence without silently changing agreed outcomes.
+2. Follow **superpowers:test-driven-development** for behavior changes. Use appropriate checks for non-code work; do not claim those prove runtime behavior.
+3. **Use commit:** checkpoint known task changes as WIP before tests or verification, without routine confirmation. Exclude unrelated changes and preserve their index state. Amend later edits and fixes into WIP before each rerun.
+4. Follow **superpowers:verification-before-completion**: run the relevant checks, read full results, and compare implementation against requirements. Mark verified only what the evidence supports. Remove `WIP:` only after fresh successful verification; leave it if required checks cannot pass.
+5. Self-review the scoped diff. For complex, major, or high-risk changes, require independent review through **superpowers:requesting-code-review**, explicit recovery/rollback, and broader verification. Resolve critical/important findings and reverify fixes. If required review is unavailable, report readiness as blocked; self-review is not a substitute.
 
-For each task:
-1. Mark as in_progress
-2. Follow each step exactly (plan has bite-sized steps)
-3. Run verifications as specified
-4. Mark as completed
+No fixed three-task batches, mandatory task tool, or routine feedback waits. Use checkpoints at meaningful boundaries and continue authorized work.
 
-### Step 3: Report
-When batch complete:
-- Show what was implemented
-- Show verification output
-- Say: "Ready for feedback."
+## Failure and Scope Changes
 
-### Step 4: Continue
-Based on feedback:
-- Apply changes if needed
-- Execute next batch
-- Repeat until complete
+Unexpected test failures require **superpowers:systematic-debugging**, not automatic escalation of every failing test. Report the failure, investigate, and fix ordinary in-scope problems; checkpoint fixes before rechecking. Expected TDD RED is not a blocker.
 
-### Step 5: Complete Development
+Pause affected work for missing authority, unsafe actions, material scope changes, critical plan gaps, or persistent blockers. State the evidence and smallest decision/help needed. Continue safe independent work when possible. Never conceal failures to meet a deadline or call implemented work verified.
 
-After all tasks complete and verified:
-- Announce: "I'm using the finishing-a-development-branch skill to complete this work."
-- **REQUIRED SUB-SKILL:** Use superpowers:finishing-a-development-branch
-- Follow that skill to verify tests, present options, execute choice
+## Finish or Pause
 
-## When to Stop and Ask for Help
+Report changes, actual verification and limits, remaining work/blockers, and checkpoint/commit state. For resumable work retain only useful decisions, progress, blockers, and next checks; no mandatory document.
 
-**STOP executing immediately when:**
-- Hit a blocker mid-batch (missing dependency, test fails, instruction unclear)
-- Plan has critical gaps preventing starting
-- You don't understand an instruction
-- Verification fails repeatedly
-
-**Ask for clarification rather than guessing.**
-
-## When to Revisit Earlier Steps
-
-**Return to Review (Step 1) when:**
-- Partner updates the plan based on your feedback
-- Fundamental approach needs rethinking
-
-**Don't force through blockers** - stop and ask.
-
-## Remember
-- Review plan critically first
-- Follow plan steps exactly
-- Don't skip verifications
-- Reference skills when plan says to
-- Between batches: just report and wait
-- Stop when blocked, don't guess
-
-## Integration
-
-**Workflow skills:**
-- **superpowers:writing-plans** - Creates the plan this skill executes
-- **superpowers:finishing-a-development-branch** - Complete development after all tasks
+Use **superpowers:finishing-a-development-branch** only when integration or cleanup is requested or a branch decision is needed. Completion alone does not authorize push, merge, deletion, or deployment, and does not require an integration-options menu.

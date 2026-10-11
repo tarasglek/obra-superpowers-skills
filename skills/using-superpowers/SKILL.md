@@ -1,95 +1,39 @@
 ---
 name: using-superpowers
-description: Use when starting any conversation - establishes how to find and use skills, requiring Skill tool invocation before ANY response including clarifying questions
+description: Use when starting a conversation or deciding which workflow skills apply
 ---
-
-<EXTREMELY-IMPORTANT>
-If you think there is even a 1% chance a skill might apply to what you are doing, you ABSOLUTELY MUST invoke the skill.
-
-IF A SKILL APPLIES TO YOUR TASK, YOU DO NOT HAVE A CHOICE. YOU MUST USE IT.
-
-This is not negotiable. This is not optional. You cannot rationalize your way out of this.
-</EXTREMELY-IMPORTANT>
-
-## How to Access Skills
-
-**In Claude Code:** Use the `Skill` tool. When you invoke a skill, its content is loaded and presented to you—follow it directly. Never use the Read tool on skill files.
-
-**In other environments:** Check your platform's documentation for how skills are loaded.
 
 # Using Skills
 
-## The Rule
+Remove ceremony, not quality controls. Match process to uncertainty and risk; respect the user's authorized scope.
 
-**Invoke relevant or requested skills BEFORE any response or action.** Even a 1% chance a skill might apply means that you should invoke the skill to check. If an invoked skill turns out to be wrong for the situation, you don't need to use it.
+## Load What Applies
 
-```dot
-digraph skill_flow {
-    "User message received" [shape=doublecircle];
-    "About to EnterPlanMode?" [shape=doublecircle];
-    "Already brainstormed?" [shape=diamond];
-    "Invoke brainstorming skill" [shape=box];
-    "Might any skill apply?" [shape=diamond];
-    "Invoke Skill tool" [shape=box];
-    "Announce: 'Using [skill] to [purpose]'" [shape=box];
-    "Has checklist?" [shape=diamond];
-    "Create TodoWrite todo per item" [shape=box];
-    "Follow skill exactly" [shape=box];
-    "Respond (including clarifications)" [shape=doublecircle];
+Check available skill descriptions before acting. Load requested and applicable skills using the platform's skill tool, or read their files when no skill tool exists. Use current instructions, not memory. Resolve consequential uncertainty about applicability by reading the skill; do not load every remotely related skill.
 
-    "About to EnterPlanMode?" -> "Already brainstormed?";
-    "Already brainstormed?" -> "Invoke brainstorming skill" [label="no"];
-    "Already brainstormed?" -> "Might any skill apply?" [label="yes"];
-    "Invoke brainstorming skill" -> "Might any skill apply?";
+Use process guidance before domain implementation guidance. Required safety sub-skills still apply; a cross-reference alone does not require starting an unrelated workflow. Do not announce internal skill activation.
 
-    "User message received" -> "Might any skill apply?";
-    "Might any skill apply?" -> "Invoke Skill tool" [label="yes, even 1%"];
-    "Might any skill apply?" -> "Respond (including clarifications)" [label="definitely not"];
-    "Invoke Skill tool" -> "Announce: 'Using [skill] to [purpose]'";
-    "Announce: 'Using [skill] to [purpose]'" -> "Has checklist?";
-    "Has checklist?" -> "Create TodoWrite todo per item" [label="yes"];
-    "Has checklist?" -> "Follow skill exactly" [label="no"];
-    "Create TodoWrite todo per item" -> "Follow skill exactly";
-}
-```
+## Choose the Smallest Safe Workflow
 
-## Red Flags
+- Clear, routine, authorized task: inspect relevant state, use focused tests and self-review, then report results. No separate design approval or plan document needed.
+- Consequential unresolved requirements: use **superpowers:brainstorming** to resolve them before affected implementation.
+- Multi-step work needing coordination: use **superpowers:writing-plans**; execute or resume with **superpowers:executing-plans**. A short inline checklist usually suffices.
+- Complex work: make design decisions and trade-offs explicit. Complex, major, or high-risk changes require independent review, rollback/recovery planning, and broader verification proportionate to impact. Use **superpowers:requesting-code-review**; if review is unavailable, report the gap rather than treating self-review as equivalent.
+- Plan-only or proposal-only requests: present the proposal and stop. A plan is not execution authorization.
 
-These thoughts mean STOP—you're rationalizing:
+In the core workflow, do not impose mandatory documents, task-tool entries, fixed batches, handoffs, or repeated approvals inside already authorized scope. A deliberately selected specialized workflow may retain its own tracking and review gates. Use them when requested or genuinely useful. Preserve explicit approval requirements for ambiguous scope, destructive actions, deployment, or other safety/authorization boundaries.
 
-| Thought | Reality |
-|---------|---------|
-| "This is just a simple question" | Questions are tasks. Check for skills. |
-| "I need more context first" | Skill check comes BEFORE clarifying questions. |
-| "Let me explore the codebase first" | Skills tell you HOW to explore. Check first. |
-| "I can check git/files quickly" | Files lack conversation context. Check for skills. |
-| "Let me gather information first" | Skills tell you HOW to gather information. |
-| "This doesn't need a formal skill" | If a skill exists, use it. |
-| "I remember this skill" | Skills evolve. Read current version. |
-| "This doesn't count as a task" | Action = task. Check for skills. |
-| "The skill is overkill" | Simple things become complex. Use it. |
-| "I'll just do this one thing first" | Check BEFORE doing anything. |
-| "This feels productive" | Undisciplined action wastes time. Skills prevent this. |
-| "I know what that means" | Knowing the concept ≠ using the skill. Invoke it. |
+## Quality and Checkpoints
 
-## Skill Priority
+Preserve user work, including unrelated staged changes. Follow **superpowers:test-driven-development** for behavior changes and **superpowers:systematic-debugging** for unexpected failures; brevity is not permission to skip either.
 
-When multiple skills could apply, use this order:
+**REQUIRED:** Use **commit** and **superpowers:verification-before-completion**. Checkpoint known task changes as WIP before tests or verification, without routine confirmation. Amend later edits/fixes into WIP before rerunning checks; remove `WIP:` only after fresh successful verification. Exclude unrelated changes. Checkpoint permission does not authorize push, merge, deletion, or deployment.
 
-1. **Process skills first** (brainstorming, debugging) - these determine HOW to approach the task
-2. **Implementation skills second** (frontend-design, mcp-builder) - these guide execution
+## User Progress Contract
 
-"Let's build X" → brainstorming first, then implementation skills.
-"Fix this bug" → debugging first, then domain-specific skills.
+- Start substantive execution with a short scope and next-action update.
+- During longer work, update at meaningful milestones, unexpected failures, blockers, or scope changes. After roughly 2 minutes of silence, give a brief heartbeat, including while tools or agents run.
+- Use brief **Done / Left / Blocked**, or equivalent natural wording; omit empty fields. Distinguish verified results from merely implemented changes. Say when nothing new is verified.
+- Final update: completed work, actual verification and its limits, remaining work/blockers.
 
-## Skill Types
-
-**Rigid** (TDD, debugging): Follow exactly. Don't adapt away discipline.
-
-**Flexible** (patterns): Adapt principles to context.
-
-The skill itself tells you which.
-
-## User Instructions
-
-Instructions say WHAT, not HOW. "Add X" or "Fix Y" doesn't mean skip workflows.
+Updates are required, not optional ceremony. Do not narrate every tool call, dump routine logs, or turn progress updates into approval waits. Continue within scope unless a real boundary requires a decision.

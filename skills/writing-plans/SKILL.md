@@ -1,82 +1,37 @@
 ---
 name: writing-plans
-description: Use when you have a spec or requirements for a multi-step task, before touching code
+description: Use when asked for an implementation plan or when multi-step work needs sequencing and coordination
 ---
 
 # Writing Plans
 
-## Overview
+Write the smallest plan that makes safe execution clear. Prefer a short inline checklist; expand for real complexity, not a fixed template or word count. A trivial authorized change needs no separate plan.
 
-Write **brief checklist-style implementation plans**. Plans should be easy to scan, easy to execute, and specific enough that another agent can follow them without guessing.
+## Plan Content
 
-**Default style:** caveman systems engineer: terse, precise checkboxes. Aim for shortest path to an end-to-end result. Research existing solutions and libraries before building. Avoid creating frameworks or abstractions for one-off needs. Start with known tasks; extend checklist as execution reveals more. Keep each step verifiable. Less is more.
+Inspect relevant state and reuse existing solutions. Ask only questions that materially affect scope, correctness, safety, or authorization. Do not invent exact paths or commands when the repository has not been inspected; label those as assumptions or discovery steps.
 
-**Announce at start:** "I'm using the writing-plans skill to create the implementation plan."
+Each coherent task should identify:
+- The intended change and affected paths.
+- Dependencies or important ordering constraints.
+- Verification commands and expected results, including test-first RED/GREEN steps for behavior changes.
 
-**Save plans to:** `docs/plans/YYYY-MM-DD-<feature-name>.md`
+Include design decisions, failure handling, rollback/recovery, manual checks, and broader verification where risk warrants them. Complex, major, or high-risk changes need independent review; identify where it gates readiness. Routine changes need focused tests and self-review, not automatic reviewer dispatch.
 
-## Plan Header
-
-Every plan starts with:
-
-```markdown
-# [Feature Name] Implementation Plan
-
-> **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
-
-**Goal:** [one sentence]
-**Architecture:** [1-2 short sentences]
-**Tech Stack:** [key crates/tools]
-
----
-```
-
-## Checklist Format
-
-Prefer this format:
+Example:
 
 ```markdown
-- [ ] Task 1: [short task name]
-  - Files: `src/foo.rs`, `tests/foo_test.rs`
-  - Test first: add/modify `[specific test]`
-  - Verify RED: `cargo test ...` should fail because `[reason]`
-  - Implement: `[specific minimal change]`
-  - Verify GREEN: `cargo test ...`
-
-- [ ] Task 2: [short task name]
-  - Files: `src/bar.rs`
-  - Change: `[specific change]`
-  - Verify: `cargo check ...`
+- [ ] Fix boundary handling in `src/limit.ts`; add regression in `tests/limit.test.ts`.
+  - RED: `npm test -- tests/limit.test.ts` fails on the boundary case.
+  - GREEN: minimal fix; rerun the focused suite, then relevant regression checks.
 ```
 
-## Required Detail
+**Checkpoint policy applies throughout:** use **commit** to WIP-checkpoint each task edit before its next test or verification; amend fixes before reruns and finalize only after fresh successful verification. Do not repeat these mechanics under every task, but never omit them from execution. Use **superpowers:test-driven-development** and **superpowers:verification-before-completion** as applicable.
 
-Keep plans short, but include:
+## Delivery
 
-- Exact file paths
-- Exact commands for verification
-- Expected failure/pass result for tests
-- TDD steps for behavior changes
-- Hardware/manual checks when needed
-- Any important ordering constraints
+- **Plan-only / proposal-only:** present the plan and stop. Do not implement or add repository files unless requested.
+- **Execution already authorized:** proceed within scope using **superpowers:executing-plans** when useful. Do not ask again merely because the plan is ready.
+- Save a plan only when requested or useful for long/resumable work. No mandatory filename, header, design document, or separate session handoff.
 
-## What to Avoid
-
-- Long code blocks unless essential
-- Teaching the whole codebase
-- Repeating obvious mechanics
-- Commit steps unless explicitly requested
-- Over-specifying implementation details that are better discovered while coding
-
-## Good Task Size
-
-Each checklist item should be one coherent chunk, usually 5-20 minutes:
-
-- Good: "Add CLI parser variants and host tests"
-- Good: "Remove boot-time WiFi spawn"
-- Bad: "Implement all WiFi management"
-- Bad: "Change one line" repeated 20 times
-
-## Handoff
-
-After saving the plan, say where it was written and offer to execute it.
+Follow **superpowers:using-superpowers** for user updates and safety boundaries. Avoid skill announcements, long code blocks, repeating requirements, teaching the whole codebase, or prescribing details better discovered during implementation.

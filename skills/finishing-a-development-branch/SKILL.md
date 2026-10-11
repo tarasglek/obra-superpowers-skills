@@ -1,6 +1,6 @@
 ---
 name: finishing-a-development-branch
-description: Use when implementation is complete, all tests pass, and you need to decide how to integrate the work - guides completion of development work by presenting structured options for merge, PR, or cleanup
+description: Use when verified work needs an integration or cleanup action, or a branch decision is requested
 ---
 
 # Finishing a Development Branch
@@ -11,7 +11,7 @@ Guide completion of development work by presenting clear options and handling ch
 
 **Core principle:** Verify tests → Present options → Execute choice → Clean up.
 
-**Announce at start:** "I'm using the finishing-a-development-branch skill to complete this work."
+Use only when integration/cleanup is requested or a branch decision is needed, not after every completed task. Follow the progress contract in **superpowers:using-superpowers**; do not announce skill activation. Existing authorization does not need repeating, but completion alone never authorizes push, merge, deletion, or deployment.
 
 ## The Process
 
@@ -48,7 +48,7 @@ Or ask: "This branch split from main - is that correct?"
 
 ### Step 3: Present Options
 
-Present exactly these 4 options:
+If the user already selected an authorized action, proceed to it without asking again. Otherwise, when a branch decision is actually needed, offer relevant options such as:
 
 ```
 Implementation complete. What would you like to do?
@@ -103,7 +103,7 @@ EOF
 )"
 ```
 
-Then: Cleanup worktree (Step 5)
+Keep the worktree for further PR work; do not automatically clean it up.
 
 #### Option 3: Keep As-Is
 
@@ -135,7 +135,7 @@ Then: Cleanup worktree (Step 5)
 
 ### Step 5: Cleanup Worktree
 
-**For Options 1, 2, 4:**
+**For Options 1 and 4 only, within authorized cleanup scope:**
 
 Check if in worktree:
 ```bash
@@ -147,7 +147,7 @@ If yes:
 git worktree remove <worktree-path>
 ```
 
-**For Option 3:** Keep worktree.
+**For Options 2 and 3:** Keep worktree.
 
 ## Quick Reference
 
@@ -164,9 +164,9 @@ git worktree remove <worktree-path>
 - **Problem:** Merge broken code, create failing PR
 - **Fix:** Always verify tests before offering options
 
-**Open-ended questions**
-- **Problem:** "What should I do next?" → ambiguous
-- **Fix:** Present exactly 4 structured options
+**Repeated handoff questions**
+- **Problem:** Asking for a branch decision after every task, even when no integration is requested
+- **Fix:** Report results; offer relevant options only when a decision is needed
 
 **Automatic worktree cleanup**
 - **Problem:** Remove worktree when might need it (Option 2, 3)
@@ -186,15 +186,14 @@ git worktree remove <worktree-path>
 
 **Always:**
 - Verify tests before offering options
-- Present exactly 4 options
+- Respect already selected actions; ask only for unresolved authorization or decisions
 - Get typed confirmation for Option 4
 - Clean up worktree for Options 1 & 4 only
 
 ## Integration
 
 **Called by:**
-- **subagent-driven-development** (Step 7) - After all tasks complete
-- **executing-plans** (Step 5) - After all batches complete
+- **subagent-driven-development** or **executing-plans** - Only when integration/cleanup is requested or a branch decision is needed
 
 **Pairs with:**
 - **using-git-worktrees** - Cleans up worktree created by that skill
