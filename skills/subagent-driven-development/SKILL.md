@@ -15,25 +15,24 @@ Execute plan by dispatching fresh subagent per task, with two-stage review after
 digraph when_to_use {
     "Have implementation plan?" [shape=diamond];
     "Tasks mostly independent?" [shape=diamond];
-    "Stay in this session?" [shape=diamond];
+    "Fresh subagent and two-stage review per task?" [shape=diamond];
     "subagent-driven-development" [shape=box];
     "executing-plans" [shape=box];
     "Manual execution or brainstorm first" [shape=box];
 
     "Have implementation plan?" -> "Tasks mostly independent?" [label="yes"];
     "Have implementation plan?" -> "Manual execution or brainstorm first" [label="no"];
-    "Tasks mostly independent?" -> "Stay in this session?" [label="yes"];
+    "Tasks mostly independent?" -> "Fresh subagent and two-stage review per task?" [label="yes"];
     "Tasks mostly independent?" -> "Manual execution or brainstorm first" [label="no - tightly coupled"];
-    "Stay in this session?" -> "subagent-driven-development" [label="yes"];
-    "Stay in this session?" -> "executing-plans" [label="no - parallel session"];
+    "Fresh subagent and two-stage review per task?" -> "subagent-driven-development" [label="yes"];
+    "Fresh subagent and two-stage review per task?" -> "executing-plans" [label="no - execute directly"];
 }
 ```
 
-**vs. Executing Plans (parallel session):**
-- Same session (no context switch)
+**vs. Executing Plans (direct execution):**
 - Fresh subagent per task (no context pollution)
-- Two-stage review after each task: spec compliance first, then code quality
-- Faster iteration (no human-in-loop between tasks)
+- Two-stage review after each task: spec compliance first, then code quality, not only at risk-based boundaries
+- Controller keeps the task list and curates context; no approval waits between tasks
 
 ## The Process
 
@@ -53,15 +52,15 @@ digraph process {
         "Dispatch code quality reviewer subagent (./code-quality-reviewer-prompt.md)" [shape=box];
         "Code quality reviewer subagent approves?" [shape=diamond];
         "Implementer subagent fixes quality issues" [shape=box];
-        "Mark task complete in TodoWrite" [shape=box];
+        "Mark task complete in task list" [shape=box];
     }
 
-    "Read plan, extract all tasks with full text, note context, create TodoWrite" [shape=box];
+    "Read plan, extract all tasks with full text, note context, create task list" [shape=box];
     "More tasks remain?" [shape=diamond];
     "Dispatch final code reviewer subagent for entire implementation" [shape=box];
     "Report verified results and remaining work; finish branch only if needed" [shape=box style=filled fillcolor=lightgreen];
 
-    "Read plan, extract all tasks with full text, note context, create TodoWrite" -> "Dispatch implementer subagent (./implementer-prompt.md)";
+    "Read plan, extract all tasks with full text, note context, create task list" -> "Dispatch implementer subagent (./implementer-prompt.md)";
     "Dispatch implementer subagent (./implementer-prompt.md)" -> "Implementer subagent asks questions?";
     "Implementer subagent asks questions?" -> "Answer questions, provide context" [label="yes"];
     "Answer questions, provide context" -> "Dispatch implementer subagent (./implementer-prompt.md)";
@@ -74,8 +73,8 @@ digraph process {
     "Dispatch code quality reviewer subagent (./code-quality-reviewer-prompt.md)" -> "Code quality reviewer subagent approves?";
     "Code quality reviewer subagent approves?" -> "Implementer subagent fixes quality issues" [label="no"];
     "Implementer subagent fixes quality issues" -> "Dispatch code quality reviewer subagent (./code-quality-reviewer-prompt.md)" [label="re-review"];
-    "Code quality reviewer subagent approves?" -> "Mark task complete in TodoWrite" [label="yes"];
-    "Mark task complete in TodoWrite" -> "More tasks remain?";
+    "Code quality reviewer subagent approves?" -> "Mark task complete in task list" [label="yes"];
+    "Mark task complete in task list" -> "More tasks remain?";
     "More tasks remain?" -> "Dispatch implementer subagent (./implementer-prompt.md)" [label="yes"];
     "More tasks remain?" -> "Dispatch final code reviewer subagent for entire implementation" [label="no"];
     "Dispatch final code reviewer subagent for entire implementation" -> "Report verified results and remaining work; finish branch only if needed";
@@ -95,7 +94,7 @@ You: I'll implement the approved tasks, review each result, and report progress 
 
 [Read plan file once: docs/plans/feature-plan.md]
 [Extract all 5 tasks with full text and context]
-[Create TodoWrite with all tasks]
+[Create task list with all tasks; any task tool is optional]
 
 Task 1: Hook installation script
 
@@ -162,10 +161,14 @@ Code reviewer: ✅ Approved
 ...
 
 [After all tasks]
+[Controller runs the full suite fresh: 13/13 pass; checks git diff against the plan. Implementer-reported results are re-checked, not trusted]
 [Dispatch final code-reviewer]
 Final reviewer: All requirements met, ready to merge
 
-Done!
+Final update to user:
+  Done: 5 tasks implemented, each spec- and quality-reviewed; commits finalized
+  Verified: controller ran the full suite, 13/13 pass; final independent review found no open issues
+  No remaining work; branch integration only if you request it
 ```
 
 ## Advantages
@@ -177,9 +180,8 @@ Done!
 - Subagent can ask questions (before AND during work)
 
 **vs. Executing Plans:**
-- Same session (no handoff)
-- Continuous progress (no waiting)
-- Review checkpoints automatic
+- Fresh context per task
+- Independent two-stage review on every task is automatic
 
 **Efficiency gains:**
 - No file reading overhead (controller provides full text)
@@ -222,7 +224,7 @@ Done!
 - Don't rush them into implementation
 
 **If reviewer finds issues:**
-- Implementer (same subagent) fixes them
+- Implementer (same subagent) fixes them: if the finalized commit is HEAD and unpushed, re-mark it as WIP, amend, reverify, then re-finalize; otherwise a follow-up WIP commit per **commit**. Never rewrite pushed history without an explicit request
 - Reviewer reviews again
 - Repeat until approved
 - Don't skip the re-review
@@ -244,4 +246,4 @@ Done!
 - **commit** - Subagents checkpoint known task edits without confirmation before each test run, amend fixes, and finalize only after fresh verification
 
 **Alternative workflow:**
-- **superpowers:executing-plans** - Use for parallel session instead of same-session execution
+- **superpowers:executing-plans** - Direct execution in the current session when per-task subagents are not needed

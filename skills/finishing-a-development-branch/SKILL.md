@@ -48,7 +48,7 @@ Or ask: "This branch split from main - is that correct?"
 
 ### Step 3: Present Options
 
-If the user already selected an authorized action, proceed to it without asking again. Otherwise, when a branch decision is actually needed, offer relevant options such as:
+If the user already selected an authorized action, proceed to it without asking again, except Option 4, which always requires the typed discard confirmation below. Otherwise, when a branch decision is actually needed, offer relevant options such as:
 
 ```
 Implementation complete. What would you like to do?

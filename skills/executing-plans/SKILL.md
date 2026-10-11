@@ -19,9 +19,9 @@ Follow the **User Progress Contract in superpowers:using-superpowers**: start wi
 
 For each coherent task:
 1. Inspect the relevant implementation and tests. Adapt incidental details to current evidence without silently changing agreed outcomes.
-2. Follow **superpowers:test-driven-development** for behavior changes. Use appropriate checks for non-code work; do not claim those prove runtime behavior.
+2. Follow **superpowers:test-driven-development** for code changes, including refactoring. Use appropriate checks for non-code work; do not claim those prove runtime behavior.
 3. **Use commit:** checkpoint known task changes as WIP before tests or verification, without routine confirmation. Exclude unrelated changes and preserve their index state. Amend later edits and fixes into WIP before each rerun.
-4. Follow **superpowers:verification-before-completion**: run the relevant checks, read full results, and compare implementation against requirements. Mark verified only what the evidence supports. Remove `WIP:` only after fresh successful verification; leave it if required checks cannot pass.
+4. Follow **superpowers:verification-before-completion**: run the relevant checks, read full results, and compare implementation against requirements. Mark verified only what the evidence supports. Remove `WIP:` only after fresh successful verification; leave it if required checks cannot pass. Fixes after finalization, including review-driven fixes: if the finalized commit is HEAD and unpushed, re-mark it as WIP, amend, reverify, then re-finalize; otherwise follow **commit** for a follow-up WIP commit. Never rewrite pushed history without an explicit request.
 5. Self-review the scoped diff. For complex, major, or high-risk changes, require independent review through **superpowers:requesting-code-review**, explicit recovery/rollback, and broader verification. Resolve critical/important findings and reverify fixes. If required review is unavailable, report readiness as blocked; self-review is not a substitute.
 
 No fixed three-task batches, mandatory task tool, or routine feedback waits. Use checkpoints at meaningful boundaries and continue authorized work.

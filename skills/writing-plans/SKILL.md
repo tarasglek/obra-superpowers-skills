@@ -14,7 +14,7 @@ Inspect relevant state and reuse existing solutions. Ask only questions that mat
 Each coherent task should identify:
 - The intended change and affected paths.
 - Dependencies or important ordering constraints.
-- Verification commands and expected results, including test-first RED/GREEN steps for behavior changes.
+- Verification commands and expected results, including test-first steps for code changes; for refactors, the tests that must stay green.
 
 Include design decisions, failure handling, rollback/recovery, manual checks, and broader verification where risk warrants them. Complex, major, or high-risk changes need independent review; identify where it gates readiness. Routine changes need focused tests and self-review, not automatic reviewer dispatch.
 

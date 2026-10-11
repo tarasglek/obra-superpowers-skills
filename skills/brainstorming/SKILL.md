@@ -10,7 +10,7 @@ Resolve what matters before implementation. Do not turn a clear authorized task 
 1. Inspect relevant code, constraints, and existing solutions. Research history, prior work, or primary sources when needed to resolve consequential uncertainty; do not require a sweep of every source for every task.
 2. Identify decisions that affect correctness, scope, safety, or authorization. If none remain and execution is authorized, proceed without a separate approval round.
 3. Ask the smallest useful question set for material unknowns. Recommend a default where safe; compare alternatives only when their trade-offs matter. Do not guess retention rules, destructive intent, or deployment authority.
-4. Summarize the chosen behavior, constraints, and verification briefly. For complex/high-risk work, make architecture, failure modes, recovery, and important trade-offs explicit; arrange independent review before declaring readiness.
+4. Summarize the chosen behavior, constraints, and verification briefly. For complex, major, or high-risk work, make architecture, failure modes, recovery, and important trade-offs explicit; arrange independent review before declaring readiness.
 
 ## Proceed or Stop
 
